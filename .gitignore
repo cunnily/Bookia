@@ -17,6 +17,7 @@ ethereum/coverage.json
 ethereum/ignition/deployments/chain-31337
 
 ethereum/hardhat.config.js
+ethereum/dist
 
 #client
 
