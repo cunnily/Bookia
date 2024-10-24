@@ -3,9 +3,9 @@ import { Contract, ethers } from 'ethers';
 import { useWallet } from './contexts/walletContext';
 
 async function fetchContactInfo(address, _provider) {
-  const provider = _provider;
+  let provider = _provider;
   if (!provider) {
-    provider = ethers.getDefaultProvider();
+    provider = new ethers.JsonRpcProvider("https://ethereum-sepolia-rpc.publicnode.com", "sepolia")
   }
   const contactFactoryAbi = [
         {
@@ -197,6 +197,7 @@ export default function Search() {
       setContactInfo([address, await contact.telegram(), await contact.discord(), await contact.desc()])
     } catch (error) {
       setError(error);
+      console.error(error.message)
     } finally {
       setAddress('')
     }
