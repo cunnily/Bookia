@@ -1,9 +1,12 @@
 import { useState } from 'react';
-import { Contract } from 'ethers';
+import { Contract, ethers } from 'ethers';
 import { useWallet } from './contexts/walletContext';
 
 async function fetchContactInfo(address, _provider) {
   const provider = _provider;
+  if (!provider) {
+    provider = ethers.getDefaultProvider();
+  }
   const contactFactoryAbi = [
         {
           "inputs": [
