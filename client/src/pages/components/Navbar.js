@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { ConnectButtonCustom }  from './ConnectButton';
+import ConnectButtonCustom  from './ConnectButton';
 
 export default function Navbar() {
     

@@ -112,3 +112,5 @@ export const contactABI = [
       "type": "function"
     }
 ];
+
+export default contactABI;

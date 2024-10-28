@@ -50,3 +50,5 @@ export const contactFactoryABI = [
       "type": "function"
     }
 ];
+
+export default contactFactoryABI;

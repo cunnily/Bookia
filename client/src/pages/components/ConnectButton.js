@@ -62,3 +62,5 @@ export const ConnectButtonCustom = () => {
     </ConnectButton.Custom>
   );
 };
+
+export default ConnectButtonCustom
