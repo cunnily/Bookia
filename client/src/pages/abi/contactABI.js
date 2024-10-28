@@ -1,4 +1,4 @@
-export default contactABI = [
+const contactABI = [
     {
       "inputs": [
         {
@@ -112,3 +112,5 @@ export default contactABI = [
       "type": "function"
     }
 ];
+
+export default contactABI;
