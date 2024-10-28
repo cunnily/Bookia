@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Contract, ethers } from 'ethers';
 import contactFactoryABI from '../lib/abi/contactFactoryABI';
 import contactABI from '../lib/abi/contactABI';
-import useEthersProvider from './customHooks/useEthersProvider';
+import useEthersProvider from '../lib/customHooks/useEthersProvider'
 
 async function fetchContactInfo(address, _provider) {
   let provider = _provider;
