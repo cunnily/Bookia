@@ -1,84 +1,35 @@
 import { useState } from 'react';
 import { Contract } from 'ethers';
-import { useWallet } from './contexts/walletContext';
+import { contactFactoryABI } from './abi/contactFactoryABI';
+import { useEthersProvider } from './customHooks/useEthersProvider'
+import { useEthersSigner } from './customHooks/useEthersSigner';
+import { useAccount } from 'wagmi';
+import { useConnectModal } from '@rainbow-me/rainbowkit';
 
-
-async function connectToContract(provider, connectWallet) {
-  const contactFactoryAddress = "0xf693749ED7bb09570F3fb8D55c362b4c00D18a4c"; // Адрес контракта
-  const contactFactoryAbi = [
-  {
-    "inputs": [
-      {
-        "internalType": "string",
-        "name": "_telegram",
-        "type": "string"
-      },
-      {
-        "internalType": "string",
-        "name": "_discord",
-        "type": "string"
-      }
-    ],
-    "name": "deploy",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "string",
-        "name": "_telegram",
-        "type": "string"
-      }
-    ],
-    "name": "deploy",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "",
-        "type": "address"
-      }
-    ],
-    "name": "ownerToContact",
-    "outputs": [
-      {
-        "internalType": "address",
-        "name": "",
-        "type": "address"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  }
-  ];
-
-  let currentProvider = provider;
-  if (!provider) {
-    currentProvider = await connectWallet();
-  }
-
-  const signer = await currentProvider.getSigner();
-  return new Contract(contactFactoryAddress, contactFactoryAbi, signer);
-}
 
 export default function Create() {
   const [telegram, setTelegram] = useState('');
   const [discord, setDiscord] = useState('');
   const [message, setMessage] = useState('');
   const [addDiscord, setAddDiscord] = useState(false);
-  const {connectWallet, provider} = useWallet();
+  const account = useAccount();
+  const signer = useEthersSigner();
+  const { openConnectModal } = useConnectModal();
+
 
   // Функция для отправки данных в контракт
   const handleSubmitClick = async () => {
-
+    
     try {
-      const contract = await connectToContract(provider, connectWallet)
+      const contactFactoryAddress = "0xf693749ED7bb09570F3fb8D55c362b4c00D18a4c"; // Адрес контракта
+      const contactFactoryAbi = contactFactoryABI;
+
+      if (!account.isConnected) {
+        await openConnectModal();
+        return
+      }
+
+      const contract = new Contract(contactFactoryAddress, contactFactoryAbi, signer);
       let tx;
       if (addDiscord && discord) {
         tx = await contract["deploy(string,string)"](telegram, discord);

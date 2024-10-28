@@ -1,184 +1,23 @@
 import { useState } from 'react';
 import { Contract, ethers } from 'ethers';
-import { useWallet } from './contexts/walletContext';
+import { contactFactoryABI } from './abi/contactFactoryABI';
+import { contactABI } from './abi/contactABI';
+import { useEthersProvider } from './customHooks/useEthersProvider';
 
 async function fetchContactInfo(address, _provider) {
   let provider = _provider;
-  if (!provider) {
+  if (!_provider) {
     provider = new ethers.JsonRpcProvider("https://ethereum-sepolia-rpc.publicnode.com", "sepolia")
+
   }
-  const contactFactoryAbi = [
-        {
-          "inputs": [
-            {
-              "internalType": "string",
-              "name": "_telegram",
-              "type": "string"
-            },
-            {
-              "internalType": "string",
-              "name": "_discord",
-              "type": "string"
-            }
-          ],
-          "name": "deploy",
-          "outputs": [],
-          "stateMutability": "nonpayable",
-          "type": "function"
-        },
-        {
-          "inputs": [
-            {
-              "internalType": "string",
-              "name": "_telegram",
-              "type": "string"
-            }
-          ],
-          "name": "deploy",
-          "outputs": [],
-          "stateMutability": "nonpayable",
-          "type": "function"
-        },
-        {
-          "inputs": [
-            {
-              "internalType": "address",
-              "name": "",
-              "type": "address"
-            }
-          ],
-          "name": "ownerToContact",
-          "outputs": [
-            {
-              "internalType": "address",
-              "name": "",
-              "type": "address"
-            }
-          ],
-          "stateMutability": "view",
-          "type": "function"
-        }
-  ]
+  const contactFactoryAbi = contactFactoryABI;
   const contactFactoryAddress = "0xf693749ed7bb09570f3fb8d55c362b4c00d18a4c"
   const contactFactory = new Contract(contactFactoryAddress, contactFactoryAbi, provider)
   const contactAddress = await contactFactory.ownerToContact(address)
   if (contactAddress == "0x0000000000000000000000000000000000000000") {
     throw new Error("Contact is not found")
   } 
-  const contactAbi = [
-    {
-      "inputs": [
-        {
-          "internalType": "address",
-          "name": "_owner",
-          "type": "address"
-        },
-        {
-          "internalType": "string",
-          "name": "_telegram",
-          "type": "string"
-        },
-        {
-          "internalType": "string",
-          "name": "_discord",
-          "type": "string"
-        }
-      ],
-      "stateMutability": "nonpayable",
-      "type": "constructor"
-    },
-    {
-      "inputs": [],
-      "name": "desc",
-      "outputs": [
-        {
-          "internalType": "string",
-          "name": "",
-          "type": "string"
-        }
-      ],
-      "stateMutability": "view",
-      "type": "function"
-    },
-    {
-      "inputs": [],
-      "name": "discord",
-      "outputs": [
-        {
-          "internalType": "string",
-          "name": "",
-          "type": "string"
-        }
-      ],
-      "stateMutability": "view",
-      "type": "function"
-    },
-    {
-      "inputs": [],
-      "name": "owner",
-      "outputs": [
-        {
-          "internalType": "address",
-          "name": "",
-          "type": "address"
-        }
-      ],
-      "stateMutability": "view",
-      "type": "function"
-    },
-    {
-      "inputs": [
-        {
-          "internalType": "string",
-          "name": "_desc",
-          "type": "string"
-        }
-      ],
-      "name": "setDesc",
-      "outputs": [],
-      "stateMutability": "nonpayable",
-      "type": "function"
-    },
-    {
-      "inputs": [
-        {
-          "internalType": "string",
-          "name": "_discord",
-          "type": "string"
-        }
-      ],
-      "name": "setDiscord",
-      "outputs": [],
-      "stateMutability": "nonpayable",
-      "type": "function"
-    },
-    {
-      "inputs": [
-        {
-          "internalType": "string",
-          "name": "_telegram",
-          "type": "string"
-        }
-      ],
-      "name": "setTelegram",
-      "outputs": [],
-      "stateMutability": "nonpayable",
-      "type": "function"
-    },
-    {
-      "inputs": [],
-      "name": "telegram",
-      "outputs": [
-        {
-          "internalType": "string",
-          "name": "",
-          "type": "string"
-        }
-      ],
-      "stateMutability": "view",
-      "type": "function"
-    }
-  ]
+  const contactAbi = contactABI;
   return new Contract(contactAddress, contactAbi, provider)
 }
 
@@ -186,7 +25,7 @@ export default function Search() {
   const [address, setAddress] = useState('');
   const [error, setError] = useState(null);
   const [contactInfo, setContactInfo] = useState([]);
-  const {provider} = useWallet();
+  const provider = useEthersProvider();
 
   const handleSearchSubmit = async () => {
     setError(null);

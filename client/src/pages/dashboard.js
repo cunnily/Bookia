@@ -1,10 +1,16 @@
 import { useState, useEffect } from 'react';
 import { Contract } from 'ethers';
-import { useWallet } from './contexts/walletContext';
 import { useRouter } from 'next/router';
+import { useAccount } from 'wagmi';
+import { contactFactoryABI } from './abi/contactFactoryABI';
+import { contactABI } from './abi/contactABI';
+import { useEthersProvider } from './customHooks/useEthersProvider';
+import { useEthersSigner } from './customHooks/useEthersSigner';
 
 export default function Dashboard() {
-  const { account, provider } = useWallet();
+  const { address, isConnected } = useAccount();
+  const provider = useEthersProvider();
+  const signer = useEthersSigner();
   const [telegram, setTelegram] = useState('');
   const [discord, setDiscord] = useState('');
   const [description, setDescription] = useState('');
@@ -20,179 +26,15 @@ export default function Dashboard() {
   const fetchContactData = async () => {
     try {
     
-      const contactFactoryAbi = [
-        {
-          "inputs": [
-            {
-              "internalType": "string",
-              "name": "_telegram",
-              "type": "string"
-            },
-            {
-              "internalType": "string",
-              "name": "_discord",
-              "type": "string"
-            }
-          ],
-          "name": "deploy",
-          "outputs": [],
-          "stateMutability": "nonpayable",
-          "type": "function"
-        },
-        {
-          "inputs": [
-            {
-              "internalType": "string",
-              "name": "_telegram",
-              "type": "string"
-            }
-          ],
-          "name": "deploy",
-          "outputs": [],
-          "stateMutability": "nonpayable",
-          "type": "function"
-        },
-        {
-          "inputs": [
-            {
-              "internalType": "address",
-              "name": "",
-              "type": "address"
-            }
-          ],
-          "name": "ownerToContact",
-          "outputs": [
-            {
-              "internalType": "address",
-              "name": "",
-              "type": "address"
-            }
-          ],
-          "stateMutability": "view",
-          "type": "function"
-        }
-      ];
+      const contactFactoryAbi = contactFactoryABI;
       const contactFactoryAddress = "0xf693749ed7bb09570f3fb8d55c362b4c00d18a4c";
       
       const contactFactory = new Contract(contactFactoryAddress, contactFactoryAbi, provider);
-      const contactAddress = await contactFactory.ownerToContact(account);
+      const contactAddress = await contactFactory.ownerToContact(address);
       if (contactAddress == '0x0000000000000000000000000000000000000000') {
         return
       }
-      const contactAbi = [
-    {
-      "inputs": [
-        {
-          "internalType": "address",
-          "name": "_owner",
-          "type": "address"
-        },
-        {
-          "internalType": "string",
-          "name": "_telegram",
-          "type": "string"
-        },
-        {
-          "internalType": "string",
-          "name": "_discord",
-          "type": "string"
-        }
-      ],
-      "stateMutability": "nonpayable",
-      "type": "constructor"
-    },
-    {
-      "inputs": [],
-      "name": "desc",
-      "outputs": [
-        {
-          "internalType": "string",
-          "name": "",
-          "type": "string"
-        }
-      ],
-      "stateMutability": "view",
-      "type": "function"
-    },
-    {
-      "inputs": [],
-      "name": "discord",
-      "outputs": [
-        {
-          "internalType": "string",
-          "name": "",
-          "type": "string"
-        }
-      ],
-      "stateMutability": "view",
-      "type": "function"
-    },
-    {
-      "inputs": [],
-      "name": "owner",
-      "outputs": [
-        {
-          "internalType": "address",
-          "name": "",
-          "type": "address"
-        }
-      ],
-      "stateMutability": "view",
-      "type": "function"
-    },
-    {
-      "inputs": [
-        {
-          "internalType": "string",
-          "name": "_desc",
-          "type": "string"
-        }
-      ],
-      "name": "setDesc",
-      "outputs": [],
-      "stateMutability": "nonpayable",
-      "type": "function"
-    },
-    {
-      "inputs": [
-        {
-          "internalType": "string",
-          "name": "_discord",
-          "type": "string"
-        }
-      ],
-      "name": "setDiscord",
-      "outputs": [],
-      "stateMutability": "nonpayable",
-      "type": "function"
-    },
-    {
-      "inputs": [
-        {
-          "internalType": "string",
-          "name": "_telegram",
-          "type": "string"
-        }
-      ],
-      "name": "setTelegram",
-      "outputs": [],
-      "stateMutability": "nonpayable",
-      "type": "function"
-    },
-    {
-      "inputs": [],
-      "name": "telegram",
-      "outputs": [
-        {
-          "internalType": "string",
-          "name": "",
-          "type": "string"
-        }
-      ],
-      "stateMutability": "view",
-      "type": "function"
-    }
-      ];
+      const contactAbi = contactABI;
       const contact = new Contract(contactAddress, contactAbi, provider);
 
       setTelegram(await contact.telegram());
@@ -211,7 +53,6 @@ export default function Dashboard() {
   // Функция для изменения данных в контракте
   const updateContactData = async () => {
     try {
-      const signer = await provider.getSigner();
 
       let contactWithSigner;
       if (contact) {
@@ -253,12 +94,12 @@ export default function Dashboard() {
 
   // Получаем данные при монтировании компонента
   useEffect(() => {
-    if (!account && !isLoading) {
+    if (!isConnected && !isLoading) {
       router.push('/');
-    } else if (account) {
+    } else if (isConnected) {
       fetchContactData();
     }
-  }, [account, router, telegram, discord, description]);
+  }, [address, router, telegram, discord, description]);
 
   return isLoading ? (
     <div className="flex items-center justify-center min-h-screen bg-white">

@@ -1,8 +1,7 @@
 import Link from 'next/link';
-import { useWallet } from '../contexts/walletContext';
+import { ConnectButtonCustom }  from './ConnectButton';
 
 export default function Navbar() {
-    const { account, connectWallet } = useWallet();
     
     return (
     <nav className="bg-gray-900 text-white p-4 flex justify-between items-center">
@@ -14,7 +13,8 @@ export default function Navbar() {
           <Link href="/search" className="text-lg hover:text-gray-300">Search for a Contact</Link>
         </div>
         <div >
-          {account ? (
+          <ConnectButtonCustom />
+          {/* account ? (
             <Link href="/dashboard" className="bg-gray-700 hover:bg-gray-600 text-white px-6 py-2 rounded inline-block min-w-[171px] text-center">Dashboard</Link>
           ) : (
             <button
@@ -23,7 +23,7 @@ export default function Navbar() {
             >
               Connect Metamask
             </button>
-          )}
+          ) */}
         </div>
       </nav>
     )
