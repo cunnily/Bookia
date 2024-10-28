@@ -24,3 +24,5 @@ export function useEthersProvider({ chainId } = {}) {
   const client = useClient({ chainId })
   return useMemo(() => (client ? clientToProvider(client) : undefined), [client])
 }
+
+export default useEthersProvider;

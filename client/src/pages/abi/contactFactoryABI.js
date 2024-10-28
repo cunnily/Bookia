@@ -1,4 +1,4 @@
-export const contactFactoryABI = [
+export default contactFactoryABI = [
     {
       "inputs": [
         {
@@ -50,5 +50,3 @@ export const contactFactoryABI = [
       "type": "function"
     }
 ];
-
-export default contactFactoryABI;

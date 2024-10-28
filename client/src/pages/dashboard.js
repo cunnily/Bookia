@@ -4,8 +4,8 @@ import { useRouter } from 'next/router';
 import { useAccount } from 'wagmi';
 import contactFactoryABI from './abi/contactFactoryABI';
 import contactABI from './abi/contactABI';
-import { useEthersProvider } from './customHooks/useEthersProvider';
-import { useEthersSigner } from './customHooks/useEthersSigner';
+import useEthersProvider from './customHooks/useEthersProvider';
+import useEthersSigner from './customHooks/useEthersSigner';
 
 export default function Dashboard() {
   const { address, isConnected } = useAccount();

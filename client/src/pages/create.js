@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Contract } from 'ethers';
 import contactFactoryABI from './abi/contactFactoryABI';
-import { useEthersSigner } from './customHooks/useEthersSigner';
+import useEthersSigner from './customHooks/useEthersSigner';
 import { useAccount } from 'wagmi';
 import { useConnectModal } from '@rainbow-me/rainbowkit';
 
