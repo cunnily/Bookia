@@ -102,11 +102,11 @@ export default function Dashboard() {
   }, [address, router, telegram, discord, description]);
 
   return isLoading ? (
-    <div className="flex items-center justify-center min-h-screen bg-white">
+    <div className="flex items-center justify-center h-[calc(100vh-72px)] bg-white">
       <p className="text-gray-900 text-xl">Loading...</p>
     </div>// Пока идет загрузка, показываем индикатор
     ) : (
-    <div className="bg-white min-h-screen font-roboto">
+    <div className="bg-white h-[calc(100vh-72px)] font-roboto">
       <div className="max-w-lg mx-auto p-4">
         <div className="mb-4 text-gray-900">
           <h2 className="text-3xl my-4">Current Contact Information</h2>

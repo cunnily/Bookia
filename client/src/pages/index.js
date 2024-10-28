@@ -3,7 +3,7 @@ import Main from './components/Main'
 export default function Home() {
 
   return (
-    <div className="bg-white min-h-screen font-roboto">
+    <div className="bg-white h-[calc(100vh-72px)] font-roboto">
       <Main />
       {/* Responsive adjustments */}
       <style jsx>{`

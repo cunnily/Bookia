@@ -43,7 +43,7 @@ export default function Search() {
   };
 
   return (
-    <div className="bg-white min-h-screen font-roboto">
+    <div className="bg-white h-[calc(100vh-72px)] font-roboto">
       <div className="flex flex-col items-center justify-center bg-white pt-20">
         <h1 className="text-3xl text-gray-900 font-bold mb-8">Search for a Contact</h1>
 

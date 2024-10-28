@@ -44,7 +44,7 @@ export default function Create() {
   };
 
   return (
-    <div className="bg-white min-h-screen font-roboto">
+    <div className="bg-white h-[calc(100vh-72px)] font-roboto">
       <div className="max-w-lg mx-auto p-4">
         <h1 className="flex text-3xl text-gray-900 justify-center font-bold mb-4 pt-16">Create a Contact Card</h1>
 
