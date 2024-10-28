@@ -10,7 +10,7 @@ export function clientToProvider(client) {
     ensAddress: chain.contracts?.ensRegistry?.address,
   }
   if (transport.type === 'fallback') {
-    const providers = (transport.transports).map(
+    const providers = transport.transports.map(
       ({ value }) => new JsonRpcProvider(value?.url, network),
     )
     if (providers.length === 1) return providers[0]
